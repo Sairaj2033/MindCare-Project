@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Heart, Globe, UserPlus, LogOut, User } from "lucide-react";
+import { Menu, X, Heart, Globe, UserPlus, LogOut, User, Bell, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/useAuth";
+import { useNotifications } from "@/lib/notifications";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -28,6 +29,7 @@ const Navbar = () => {
   const location = useLocation();
   const { lang, setLang, t } = useI18n();
   const { user, logout } = useAuth();
+  const { notifications, remove, clear } = useNotifications();
   const navigate = useNavigate();
 
   const getInitials = (name: string) => {
@@ -106,6 +108,55 @@ const Navbar = () => {
               Sign Up
             </Link>
           )}
+
+          {/* Notifications Dropdown Desktop */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="relative ml-2 p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground hover:text-foreground outline-none">
+                <Bell className="w-5 h-5" />
+                {notifications.length > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-destructive rounded-full" />
+                )}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80 mt-2 max-h-[70vh] overflow-y-auto">
+              <div className="flex items-center justify-between px-4 py-2">
+                <DropdownMenuLabel className="p-0 font-semibold text-base">Notifications</DropdownMenuLabel>
+                {notifications.length > 0 && (
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); clear(); }} 
+                    className="text-xs font-medium text-destructive hover:underline flex items-center gap-1"
+                  >
+                    <Trash2 className="w-3 h-3" /> Clear All
+                  </button>
+                )}
+              </div>
+              <DropdownMenuSeparator />
+              {notifications.length === 0 ? (
+                <div className="p-6 text-center text-sm text-muted-foreground border border-dashed border-border/50 rounded-lg mx-2 mb-2 mt-2">
+                  No new alerts
+                </div>
+              ) : (
+                <div className="flex flex-col gap-1 p-1">
+                  {notifications.map((n) => (
+                    <div key={n.id} className="relative group px-3 py-3 rounded-md hover:bg-muted transition-colors flex flex-col gap-1 text-left">
+                      <div className="flex justify-between items-start gap-2">
+                        <span className="font-medium text-sm text-foreground">{n.title}</span>
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); remove(n.id); }}
+                          className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-foreground mt-0.5"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                      {n.description && <span className="text-xs text-muted-foreground leading-snug">{n.description}</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
         </div>
 
         {/* Mobile toggle */}
@@ -116,6 +167,55 @@ const Navbar = () => {
           >
             {lang === "en" ? "हिं" : "EN"}
           </button>
+
+          {/* Notifications Dropdown Mobile */}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="relative p-2 rounded-full hover:bg-muted transition-colors text-muted-foreground hover:text-foreground outline-none">
+                <Bell className="w-5 h-5" />
+                {notifications.length > 0 && (
+                  <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-destructive rounded-full" />
+                )}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[85vw] max-w-sm mt-2 max-h-[80vh] overflow-y-auto">
+              <div className="flex items-center justify-between px-4 py-2">
+                <DropdownMenuLabel className="p-0 font-semibold text-base">Notifications</DropdownMenuLabel>
+                {notifications.length > 0 && (
+                  <button 
+                    onClick={(e) => { e.stopPropagation(); clear(); }} 
+                    className="text-xs font-medium text-destructive hover:underline flex items-center gap-1 min-h-[44px]"
+                  >
+                    <Trash2 className="w-3 h-3" /> Clear All
+                  </button>
+                )}
+              </div>
+              <DropdownMenuSeparator />
+              {notifications.length === 0 ? (
+                <div className="p-6 text-center text-sm text-muted-foreground border border-dashed border-border/50 rounded-lg mx-2 mb-2 mt-2">
+                  No new alerts
+                </div>
+              ) : (
+                <div className="flex flex-col gap-1 p-1">
+                  {notifications.map((n) => (
+                    <div key={n.id} className="relative px-3 py-3 rounded-md hover:bg-muted transition-colors flex flex-col gap-1 text-left">
+                      <div className="flex justify-between items-start gap-2">
+                        <span className="font-medium text-sm text-foreground leading-snug break-words pr-4">{n.title}</span>
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); remove(n.id); }}
+                          className="min-h-[44px] min-w-[44px] flex items-center justify-center text-muted-foreground hover:text-foreground mt-0.5 absolute top-1 right-0"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                      {n.description && <span className="text-xs text-muted-foreground leading-snug">{n.description}</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="p-2 rounded-lg hover:bg-muted text-foreground"

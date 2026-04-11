@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { User, Mail, Phone, Activity, BadgeCheck, LogOut, Settings } from "lucide-react";
 import { motion } from "framer-motion";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 
 export default function ProfilePage() {
   const { user, logout } = useAuth();

@@ -5,7 +5,6 @@ import Navbar from "./Navbar";
 import Footer from "./Footer";
 import AssessmentPrompt from "./AssessmentPrompt";
 import DoctorRecommendation from "./DoctorRecommendation";
-import ClearNotifications from "./ClearNotifications";
 
 const Layout = ({ children }: { children: ReactNode }) => {
   const location = useLocation();
@@ -35,7 +34,6 @@ const Layout = ({ children }: { children: ReactNode }) => {
       <Footer />
       <AssessmentPrompt />
       <DoctorRecommendation />
-      <ClearNotifications />
     </div>
   );
 };

@@ -19,7 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { registerUser, signInUser, requestPasswordReset } from "@/lib/api";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, Sparkles, AlertCircle, KeyRound } from "lucide-react";
 import Layout from "@/components/Layout";

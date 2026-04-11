@@ -30,10 +30,10 @@ const Index = () => {
         {/* Invisible Math Layer: Must use CSS absolute 0px rather than 'display:none' otherwise Chrome/Safari silently kill the filter engine entirely */}
         <svg style={{ position: "absolute", width: 0, height: 0 }}>
           <filter id="wind-displacement">
-            <feTurbulence type="fractalNoise" baseFrequency="0.005 0.01" numOctaves="2" result="noise">
-              <animate attributeName="baseFrequency" values="0.005 0.01; 0.01 0.02; 0.005 0.01" dur="12s" repeatCount="indefinite" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.004 0.008" numOctaves="2" result="noise">
+              <animate attributeName="baseFrequency" values="0.004 0.008; 0.008 0.016; 0.004 0.008" dur="24s" repeatCount="indefinite" />
             </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="35" xChannelSelector="R" yChannelSelector="G" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="60" xChannelSelector="R" yChannelSelector="G" />
           </filter>
         </svg>
 

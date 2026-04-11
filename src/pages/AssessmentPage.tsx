@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@/lib/toast";
 import Layout from "@/components/Layout";
 import { questions, answerOptions, calculateResult } from "@/lib/assessment";
 import { STRESS_LOGIC } from "@/lib/stressLogic";
