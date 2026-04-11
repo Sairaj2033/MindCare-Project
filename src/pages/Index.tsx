@@ -49,10 +49,33 @@ const Index = () => {
         </svg>
 
         <div className="absolute inset-0">
-          {/* Standard background anchor */}
+          {/* LAYER 1: Base clean image — always visible, never filtered */}
           <img src={heroBg} alt="Calming meditation illustration" className="w-full h-full object-cover" />
           
-          {/* Interactive Mouse Parallax Floating Glows & ambient particles (Significantly muted) */}
+          {/* LAYER 2: Displaced background-only — has wind filter, but masked OUT over the girl's silhouette */}
+          <img 
+            src={heroBg} 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none" 
+            style={{ 
+              filter: "url(#wind-displacement)",
+              WebkitMaskImage: "radial-gradient(ellipse 22% 50% at 52% 62%, transparent 0%, transparent 40%, black 65%)",
+              maskImage: "radial-gradient(ellipse 22% 50% at 52% 62%, transparent 0%, transparent 40%, black 65%)" 
+            }} 
+          />
+
+          {/* LAYER 3: Girl protection — clean unfiltered pixels rendered on top of displacement, covering ONLY the girl's area */}
+          <img 
+            src={heroBg} 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none" 
+            style={{ 
+              WebkitMaskImage: "radial-gradient(ellipse 22% 50% at 52% 62%, black 0%, black 38%, transparent 60%)",
+              maskImage: "radial-gradient(ellipse 22% 50% at 52% 62%, black 0%, black 38%, transparent 60%)" 
+            }} 
+          />
+
+          {/* Ambient parallax glows (muted) */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden mix-blend-screen">
             <motion.div 
               animate={{ x: mousePos.x * -10, y: mousePos.y * -10 }} 
@@ -64,7 +87,6 @@ const Index = () => {
               transition={{ type: "spring", damping: 60, stiffness: 40 }}
               className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-blue-400/15 rounded-full blur-[100px]" 
             />
-            {/* Floating Soft Light Particles */}
             <motion.div 
               animate={{ x: mousePos.x * -5, y: mousePos.y * -5 }} 
               transition={{ type: "spring", damping: 80, stiffness: 30 }}
@@ -77,64 +99,52 @@ const Index = () => {
             />
           </div>
 
-          {/* Interactive Liquid Trailing Cursor Ripple — Maximum visibility */}
+          {/* LAYER 4: Cursor water ripple orb — glowing soft lens above bg, same mask as displaced layer so girl stays clean */}
           <motion.div
-            style={{ x: springX, y: springY }}
-            className="absolute pointer-events-none z-10"
+            style={{ x: springX, y: springY, zIndex: 5, position: "absolute" }}
+            className="pointer-events-none"
           >
-            {/* Outermost halo — 500px */}
             <div
               style={{
                 position: "absolute",
-                width: 500,
-                height: 500,
-                top: -250,
-                left: -250,
+                width: 300,
+                height: 300,
+                top: -150,
+                left: -150,
                 borderRadius: "50%",
-                background: "radial-gradient(circle, rgba(186,230,253,0.50) 0%, rgba(147,197,253,0.25) 45%, transparent 70%)",
-                filter: "blur(30px)",
+                background: "radial-gradient(circle, rgba(186,230,253,0.45) 0%, rgba(147,197,253,0.22) 45%, transparent 70%)",
+                filter: "blur(20px)",
+                zIndex: 5,
               }}
             />
-            {/* Mid glow ring — 200px */}
             <div
               style={{
                 position: "absolute",
-                width: 200,
-                height: 200,
-                top: -100,
-                left: -100,
+                width: 100,
+                height: 100,
+                top: -50,
+                left: -50,
                 borderRadius: "50%",
-                background: "radial-gradient(circle, rgba(255,255,255,0.80) 0%, rgba(186,230,253,0.50) 55%, transparent 100%)",
-                filter: "blur(12px)",
+                background: "radial-gradient(circle, rgba(255,255,255,0.75) 0%, rgba(186,230,253,0.45) 55%, transparent 100%)",
+                filter: "blur(8px)",
+                zIndex: 5,
               }}
             />
-            {/* Bright center core — 60px */}
             <div
               style={{
                 position: "absolute",
-                width: 60,
-                height: 60,
-                top: -30,
-                left: -30,
+                width: 40,
+                height: 40,
+                top: -20,
+                left: -20,
                 borderRadius: "50%",
-                background: "radial-gradient(circle, rgba(255,255,255,1.0) 0%, rgba(186,230,253,0.80) 60%, transparent 100%)",
+                background: "radial-gradient(circle, rgba(255,255,255,1.0) 0%, rgba(186,230,253,0.70) 60%, transparent 100%)",
                 filter: "blur(3px)",
-                boxShadow: "0 0 20px 8px rgba(186,230,253,0.6)",
+                boxShadow: "0 0 18px 6px rgba(186,230,253,0.55)",
+                zIndex: 5,
               }}
             />
           </motion.div>
-
-          {/* Animated Environment Overlay: Protects the main character's face/body (center-bottom) with a transparent hole while running the breeze map across the background/bubbles */}
-          <img 
-            src={heroBg} 
-            alt="" 
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none" 
-            style={{ 
-              filter: "url(#wind-displacement)",
-              WebkitMaskImage: "radial-gradient(ellipse 25% 45% at 50% 70%, transparent 20%, black 50%)",
-              maskImage: "radial-gradient(ellipse 25% 45% at 50% 70%, transparent 20%, black 50%)" 
-            }} 
-          />
 
           <div className="absolute inset-0 gradient-hero opacity-50 pointer-events-none" />
         </div>
