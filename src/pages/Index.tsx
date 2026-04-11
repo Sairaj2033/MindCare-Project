@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, useSpring } from "framer-motion";
 import { ArrowRight, BarChart3, BookOpen, Brain } from "lucide-react";
 import Layout from "@/components/Layout";
 import RegisterModal from "@/components/RegisterModal";
@@ -11,11 +11,22 @@ const Index = () => {
   const { t } = useI18n();
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    // Normalize coordinates so the center is 0,0
+  // High-performance fluid 60fps tracking for the watery cursor ripple
+  const cursorX = useMotionValue(0);
+  const cursorY = useMotionValue(0);
+  const springX = useSpring(cursorX, { damping: 30, stiffness: 100 });
+  const springY = useSpring(cursorY, { damping: 30, stiffness: 100 });
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    // Ambient Parallax logic
     const x = (e.clientX / window.innerWidth - 0.5) * 2;
     const y = (e.clientY / window.innerHeight - 0.5) * 2;
     setMousePos({ x, y });
+
+    // Mathematical Trailing cursor logic accurately locating DOM container bounds
+    const rect = e.currentTarget.getBoundingClientRect();
+    cursorX.set(e.clientX - rect.left);
+    cursorY.set(e.clientY - rect.top);
   };
 
   return (
@@ -27,13 +38,13 @@ const Index = () => {
         onMouseMove={handleMouseMove}
       >
         
-        {/* Invisible Math Layer: Must use CSS absolute 0px rather than 'display:none' otherwise Chrome/Safari silently kill the filter engine entirely */}
+        {/* Invisible Math Layer: Microscopically subtle wind effect preserving structural proportions */}
         <svg style={{ position: "absolute", width: 0, height: 0 }}>
           <filter id="wind-displacement">
-            <feTurbulence type="fractalNoise" baseFrequency="0.004 0.008" numOctaves="2" result="noise">
-              <animate attributeName="baseFrequency" values="0.004 0.008; 0.008 0.016; 0.004 0.008" dur="24s" repeatCount="indefinite" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.006 0.01" numOctaves="2" result="noise">
+              <animate attributeName="baseFrequency" values="0.006 0.01; 0.008 0.012; 0.006 0.01" dur="20s" repeatCount="indefinite" />
             </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="60" xChannelSelector="R" yChannelSelector="G" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="G" />
           </filter>
         </svg>
 
@@ -41,40 +52,56 @@ const Index = () => {
           {/* Standard background anchor */}
           <img src={heroBg} alt="Calming meditation illustration" className="w-full h-full object-cover" />
           
-          {/* Interactive Mouse Parallax Floating Glows & ambient particles */}
+          {/* Interactive Mouse Parallax Floating Glows & ambient particles (Significantly muted) */}
           <div className="absolute inset-0 pointer-events-none overflow-hidden mix-blend-screen">
             <motion.div 
-              animate={{ x: mousePos.x * -40, y: mousePos.y * -40 }} 
-              transition={{ type: "spring", damping: 40, stiffness: 60 }}
+              animate={{ x: mousePos.x * -10, y: mousePos.y * -10 }} 
+              transition={{ type: "spring", damping: 60, stiffness: 40 }}
               className="absolute top-[20%] left-[20%] w-72 h-72 bg-primary/20 rounded-full blur-[90px]" 
             />
             <motion.div 
-              animate={{ x: mousePos.x * 30, y: mousePos.y * 30 }} 
-              transition={{ type: "spring", damping: 40, stiffness: 60 }}
+              animate={{ x: mousePos.x * 8, y: mousePos.y * 8 }} 
+              transition={{ type: "spring", damping: 60, stiffness: 40 }}
               className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-blue-400/15 rounded-full blur-[100px]" 
             />
             {/* Floating Soft Light Particles */}
             <motion.div 
-              animate={{ x: mousePos.x * -20, y: mousePos.y * -20 }} 
-              transition={{ type: "spring", damping: 50, stiffness: 40 }}
+              animate={{ x: mousePos.x * -5, y: mousePos.y * -5 }} 
+              transition={{ type: "spring", damping: 80, stiffness: 30 }}
               className="absolute top-[35%] right-[25%] w-2 h-2 bg-white/40 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.8)]"
             />
             <motion.div 
-              animate={{ x: mousePos.x * 25, y: mousePos.y * 25 }} 
-              transition={{ type: "spring", damping: 50, stiffness: 40 }}
+              animate={{ x: mousePos.x * 6, y: mousePos.y * 6 }} 
+              transition={{ type: "spring", damping: 80, stiffness: 30 }}
               className="absolute bottom-[45%] left-[25%] w-1.5 h-1.5 bg-primary/40 rounded-full shadow-[0_0_10px_rgba(var(--primary),0.8)]"
             />
           </div>
 
-          {/* Animated Hair Overlay: Expanded CSS masking geometry and stronger displacement wave applied */}
+          {/* Interactive Liquid Trailing Cursor Layer: Mapped perfectly onto the identical protective transparent mask hiding the torso coordinates */}
+          <div 
+            className="absolute inset-0 pointer-events-none overflow-hidden"
+            style={{
+              WebkitMaskImage: "radial-gradient(ellipse 25% 45% at 50% 70%, transparent 20%, black 50%)",
+              maskImage: "radial-gradient(ellipse 25% 45% at 50% 70%, transparent 20%, black 50%)" 
+            }}
+          >
+             <motion.div
+                style={{ x: springX, y: springY }}
+                className="absolute top-[-100px] left-[-100px] w-[200px] h-[200px] rounded-full pointer-events-none flex items-center justify-center opacity-80"
+             >
+                <div className="w-[140px] h-[140px] bg-white/5 rounded-full blur-[10px] backdrop-blur-md shadow-[0_0_30px_rgba(255,255,255,0.2)] mix-blend-overlay" />
+             </motion.div>
+          </div>
+
+          {/* Animated Environment Overlay: Protects the main character's face/body (center-bottom) with a transparent hole while running the breeze map across the background/bubbles */}
           <img 
             src={heroBg} 
             alt="" 
             className="absolute inset-0 w-full h-full object-cover pointer-events-none" 
             style={{ 
               filter: "url(#wind-displacement)",
-              WebkitMaskImage: "radial-gradient(ellipse 45% 55% at 50% 40%, black 15%, transparent 65%)",
-              maskImage: "radial-gradient(ellipse 45% 55% at 50% 40%, black 15%, transparent 65%)" 
+              WebkitMaskImage: "radial-gradient(ellipse 25% 45% at 50% 70%, transparent 20%, black 50%)",
+              maskImage: "radial-gradient(ellipse 25% 45% at 50% 70%, transparent 20%, black 50%)" 
             }} 
           />
 
