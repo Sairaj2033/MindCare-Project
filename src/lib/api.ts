@@ -36,10 +36,10 @@ export async function registerUser(data: Record<string, any>) {
       userName: data.name || "User",
       message: "We're so glad you've joined MindCare.\nWe are here to help you **Understand Your Emotions** and **Empower Your Mind**. Your journey starts right securely here.",
       ctaText: "Go to Profile",
-      ctaLink: "http://localhost:8080/profile",
+      ctaLink: `${window.location.origin}/profile`,
       secondaryCtaSubtitle: "Complete Your Setup:",
       secondaryCtaText: "Take the Assessment →",
-      secondaryCtaLink: "http://localhost:8080/assessment"
+      secondaryCtaLink: `${window.location.origin}/assessment`
     });
   }
 
@@ -53,7 +53,7 @@ export async function registerUser(data: Record<string, any>) {
       userName: data.name || "User",
       message: level === "Medium" ? SMS_MESSAGES.Medium : SMS_MESSAGES.High,
       ctaText: "View Resources",
-      ctaLink: "http://localhost:8080/helplines"
+      ctaLink: `${window.location.origin}/helplines`
     });
   }
 }

@@ -6,7 +6,7 @@ import nodemailer from "nodemailer";
 dotenv.config();
 
 const app = express();
-app.use(cors());
+app.use(cors()); // In production, replace with specific origins for better security
 app.use(express.json());
 
 // ── Nodemailer Transporter (Gmail) ────────────────────────────────────
