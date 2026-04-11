@@ -24,7 +24,7 @@ export const answerOptions = [
   { value: 3, label: "Often / Always / Very poor / Very low / Rarely / Never" },
 ];
 
-export type DepressionLevel = "Minimal" | "Mild" | "Moderate" | "Moderately Severe" | "Severe";
+export type DepressionLevel = "Low stress" | "Mild stress" | "Moderate stress" | "High stress" | "Critical stress";
 
 export interface AssessmentResult {
   totalScore: number;
@@ -39,35 +39,35 @@ export function calculateResult(answers: Record<number, number>): AssessmentResu
   const percentage = Math.round((totalScore / maxScore) * 100);
 
   let level: DepressionLevel;
-  if (percentage <= 20) level = "Minimal";
-  else if (percentage <= 40) level = "Mild";
-  else if (percentage <= 60) level = "Moderate";
-  else if (percentage <= 80) level = "Moderately Severe";
-  else level = "Severe";
+  if (percentage <= 20) level = "Low stress";
+  else if (percentage <= 40) level = "Mild stress";
+  else if (percentage <= 60) level = "Moderate stress";
+  else if (percentage <= 80) level = "High stress";
+  else level = "Critical stress";
 
   return { totalScore, maxScore, percentage, level };
 }
 
 export const levelColors: Record<DepressionLevel, string> = {
-  Minimal: "text-level-minimal",
-  Mild: "text-level-mild",
-  Moderate: "text-level-moderate",
-  "Moderately Severe": "text-level-mod-severe",
-  Severe: "text-level-severe",
+  "Low stress": "text-level-minimal",
+  "Mild stress": "text-level-mild",
+  "Moderate stress": "text-level-moderate",
+  "High stress": "text-level-mod-severe",
+  "Critical stress": "text-level-severe",
 };
 
 export const levelBgColors: Record<DepressionLevel, string> = {
-  Minimal: "bg-level-minimal",
-  Mild: "bg-level-mild",
-  Moderate: "bg-level-moderate",
-  "Moderately Severe": "bg-level-mod-severe",
-  Severe: "bg-level-severe",
+  "Low stress": "bg-level-minimal",
+  "Mild stress": "bg-level-mild",
+  "Moderate stress": "bg-level-moderate",
+  "High stress": "bg-level-mod-severe",
+  "Critical stress": "bg-level-severe",
 };
 
 export const feedbackMessages: Record<DepressionLevel, string> = {
-  Minimal: "You're doing well! Keep maintaining healthy habits and self-care routines.",
-  Mild: "You're experiencing some challenges. Small lifestyle changes can make a big difference.",
-  Moderate: "It's okay to seek support. Consider talking to a counselor or trusted person.",
-  "Moderately Severe": "Please reach out to a mental health professional. You deserve support.",
-  Severe: "Please seek immediate help. Contact a crisis helpline or visit an emergency room.",
+  "Low stress": "You're doing well! Maintain healthy habits and self-care routines.",
+  "Mild stress": "You're experiencing mild stress. Short relaxation steps can make a big difference.",
+  "Moderate stress": "Your stress is moderate. Consider breathing exercises or a short meditation session.",
+  "High stress": "Your stress is high. We recommend taking a break, trying a calming activity, and reaching out for support.",
+  "Critical stress": "Your stress levels are critical. Please rest immediately and consider reaching out to a professional or a trusted support contact.",
 };

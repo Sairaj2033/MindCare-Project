@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, BarChart3, BookOpen, Brain } from "lucide-react";
 import Layout from "@/components/Layout";
+import RegisterModal from "@/components/RegisterModal";
 import heroBg from "@/assets/hero-bg.jpg";
 import { useI18n } from "@/lib/i18n";
 
@@ -9,6 +10,7 @@ const Index = () => {
   const { t } = useI18n();
   return (
     <Layout>
+      <RegisterModal />
       {/* Hero */}
       <section className="relative min-h-[90vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">

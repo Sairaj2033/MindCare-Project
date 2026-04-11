@@ -12,6 +12,9 @@ import DataInsightsPage from "./pages/DataInsightsPage";
 import AwarenessPage from "./pages/AwarenessPage";
 import HelplinesPage from "./pages/HelplinesPage";
 import NotFound from "./pages/NotFound";
+import RegisterPage from "./pages/RegisterPage";
+import AuthPage from "./pages/AuthPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +33,9 @@ const App = () => (
             <Route path="/data-insights" element={<DataInsightsPage />} />
             <Route path="/awareness" element={<AwarenessPage />} />
             <Route path="/helplines" element={<HelplinesPage />} />
+            <Route path="/register" element={<AuthPage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

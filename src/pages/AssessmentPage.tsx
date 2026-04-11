@@ -2,13 +2,17 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { toast } from "sonner";
 import Layout from "@/components/Layout";
 import { questions, answerOptions, calculateResult } from "@/lib/assessment";
+import { STRESS_LOGIC } from "@/lib/stressLogic";
+import { sendNotification } from "@/lib/sms";
 import { useI18n } from "@/lib/i18n";
 
 const AssessmentPage = () => {
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState<Record<number, number>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const { t } = useI18n();
 
@@ -22,8 +26,76 @@ const AssessmentPage = () => {
     if (!isLast) setTimeout(() => setCurrentQ(currentQ + 1), 300);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
     const result = calculateResult(answers);
+    
+    // Save last assessment timestamp to silence the prompt
+    localStorage.setItem("lastAssessmentDate", new Date().getTime().toString());
+
+    // Evaluate logic for logged in users
+    const userStr = localStorage.getItem("currentUser");
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      // Update their stress level natively
+      user.depressionLevel = result.level;
+      localStorage.setItem("currentUser", JSON.stringify(user));
+      window.dispatchEvent(new Event("auth-change"));
+
+      // Fetch dynamic content mapping
+      const stressContent = STRESS_LOGIC[result.level];
+      
+      // Determine if a doctor is needed based on stress level
+      const needsDoctor = ["Moderate stress", "High stress", "Critical stress"].includes(result.level);
+      let doctorData = undefined;
+
+      if (needsDoctor) {
+        try {
+          // Attempt geolocation with a timeout
+          const pos = await new Promise<GeolocationPosition>((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 3000 });
+          }).catch(() => null);
+
+          const params = new URLSearchParams({ stressLevel: result.level });
+          if (pos) {
+            params.append("lat", pos.coords.latitude.toString());
+            params.append("lng", pos.coords.longitude.toString());
+          }
+
+          const res = await fetch(`http://localhost:3001/api/doctors?${params.toString()}`);
+          const data = await res.json();
+          if (data.doctor) {
+            doctorData = data.doctor;
+            // Pop the UI Card immediately after the page seamlessly transitions
+            setTimeout(() => {
+              window.dispatchEvent(new CustomEvent("show-doctor", { detail: doctorData }));
+            }, 500);
+          }
+        } catch (e) {
+          console.error("Failed to fetch nearby doctor", e);
+        }
+      }
+      
+      // Coordinated Toast
+      toast(stressContent.toastTitle, {
+        description: stressContent.emailMessage,
+        className: stressContent.toastColorClass,
+      });
+
+      // Coordinated Email (do not block UI)
+      sendNotification({
+        email: user.email,
+        subject: stressContent.emailSubject,
+        title: stressContent.emailTitle,
+        userName: user.name || "User",
+        message: stressContent.emailMessage,
+        ctaText: stressContent.ctaText,
+        ctaLink: stressContent.ctaLink,
+        doctorData: doctorData
+      }).catch((e) => console.error("Stress email failed:", e));
+    }
+
+    setIsSubmitting(false);
     navigate("/results", { state: { result } });
   };
 
@@ -73,8 +145,8 @@ const AssessmentPage = () => {
                 <ArrowLeft className="w-4 h-4" /> {t.assessment.previous}
               </button>
               {isLast && Object.keys(answers).length === questions.length ? (
-                <button onClick={handleSubmit} className="flex items-center gap-2 px-6 py-3 rounded-xl gradient-accent text-accent-foreground font-semibold shadow-card hover:opacity-90 transition-opacity">
-                  {t.assessment.viewResults} <ArrowRight className="w-4 h-4" />
+                <button onClick={handleSubmit} disabled={isSubmitting} className="flex items-center gap-2 px-6 py-3 rounded-xl gradient-accent text-accent-foreground font-semibold shadow-card hover:opacity-90 transition-opacity disabled:opacity-50">
+                  {isSubmitting ? "Processing..." : t.assessment.viewResults} <ArrowRight className="w-4 h-4" />
                 </button>
               ) : (
                 <button onClick={() => setCurrentQ(Math.min(questions.length - 1, currentQ + 1))} disabled={answers[q.id] === undefined} className="flex items-center gap-2 px-4 py-2 rounded-xl text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors">
