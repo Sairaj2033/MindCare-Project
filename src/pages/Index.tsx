@@ -77,21 +77,38 @@ const Index = () => {
             />
           </div>
 
-          {/* Interactive Liquid Trailing Cursor Layer: Mapped perfectly onto the identical protective transparent mask hiding the torso coordinates */}
-          <div 
-            className="absolute inset-0 pointer-events-none overflow-hidden"
-            style={{
-              WebkitMaskImage: "radial-gradient(ellipse 25% 45% at 50% 70%, transparent 20%, black 50%)",
-              maskImage: "radial-gradient(ellipse 25% 45% at 50% 70%, transparent 20%, black 50%)" 
-            }}
+          {/* Interactive Liquid Trailing Cursor Ripple — covers full hero, z-10 so visible */}
+          <motion.div
+            style={{ x: springX, y: springY }}
+            className="absolute pointer-events-none z-10"
           >
-             <motion.div
-                style={{ x: springX, y: springY }}
-                className="absolute top-[-100px] left-[-100px] w-[200px] h-[200px] rounded-full pointer-events-none flex items-center justify-center opacity-80"
-             >
-                <div className="w-[140px] h-[140px] bg-white/5 rounded-full blur-[10px] backdrop-blur-md shadow-[0_0_30px_rgba(255,255,255,0.2)] mix-blend-overlay" />
-             </motion.div>
-          </div>
+            {/* Outer soft glow ring */}
+            <div
+              style={{
+                position: "absolute",
+                width: 180,
+                height: 180,
+                top: -90,
+                left: -90,
+                borderRadius: "50%",
+                background: "radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(147,197,253,0.10) 50%, transparent 75%)",
+                filter: "blur(8px)",
+              }}
+            />
+            {/* Inner bright core */}
+            <div
+              style={{
+                position: "absolute",
+                width: 60,
+                height: 60,
+                top: -30,
+                left: -30,
+                borderRadius: "50%",
+                background: "radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(186,230,253,0.15) 60%, transparent 100%)",
+                filter: "blur(4px)",
+              }}
+            />
+          </motion.div>
 
           {/* Animated Environment Overlay: Protects the main character's face/body (center-bottom) with a transparent hole while running the breeze map across the background/bubbles */}
           <img 
