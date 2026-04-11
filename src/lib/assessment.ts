@@ -33,6 +33,78 @@ export interface AssessmentResult {
   level: DepressionLevel;
 }
 
+export interface HistoryEntry extends AssessmentResult {
+  timestamp: string;
+}
+
+const STORAGE_KEY = "mindcare_stress_history";
+
+export function saveResultToHistory(result: AssessmentResult): void {
+  const history = getHistory();
+  const newEntry: HistoryEntry = {
+    ...result,
+    timestamp: new Date().toISOString(),
+  };
+  // Avoid saving if the last entry is identical and from very recently (e.g. 5 seconds)
+  const lastEntry = history[0];
+  if (lastEntry) {
+    const lastTime = new Date(lastEntry.timestamp).getTime();
+    const now = new Date().getTime();
+    if (now - lastTime < 5000 && lastEntry.percentage === result.percentage) {
+      return;
+    }
+  }
+  
+  const updated = [newEntry, ...history].slice(0, 50); // Keep last 50 entries
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+}
+
+export function getHistory(): HistoryEntry[] {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+export type TrendStatus = "improving" | "stable" | "worsening" | "first";
+
+export interface TrendAnalysis {
+  status: TrendStatus;
+  message: string;
+  difference: number;
+}
+
+export function calculateTrend(history: HistoryEntry[]): TrendAnalysis {
+  if (history.length < 2) {
+    return { status: "first", message: "This is your first assessment. Keep it up!", difference: 0 };
+  }
+
+  const latest = history[0].percentage;
+  const previous = history[1].percentage;
+  const diff = latest - previous;
+
+  if (Math.abs(diff) <= 5) {
+    return { 
+      status: "stable", 
+      message: "Your stress levels are stable. Maintain your self-care routine.",
+      difference: diff
+    };
+  } else if (diff < 0) {
+    return { 
+      status: "improving", 
+      message: "Great news! Your stress levels are decreasing. Whatever you're doing is working.",
+      difference: diff
+    };
+  } else {
+    return { 
+      status: "worsening", 
+      message: "It looks like your stress has increased. Consider taking a break and using our guided exercises.",
+      difference: diff
+    };
+  }
+}
+
 export function calculateResult(answers: Record<number, number>): AssessmentResult {
   const totalScore = Object.values(answers).reduce((sum, val) => sum + val, 0);
   const maxScore = questions.length * 3; // 30

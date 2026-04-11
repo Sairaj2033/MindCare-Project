@@ -1,14 +1,24 @@
+import { useEffect, useState } from "react";
 import { useLocation, Link, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, TrendingUp, TrendingDown, Minus, Clock } from "lucide-react";
 import Layout from "@/components/Layout";
-import { AssessmentResult, levelColors, levelBgColors, DepressionLevel } from "@/lib/assessment";
+import { AssessmentResult, levelColors, levelBgColors, saveResultToHistory, getHistory, calculateTrend, TrendAnalysis } from "@/lib/assessment";
 import { useI18n } from "@/lib/i18n";
 
 const ResultsPage = () => {
   const location = useLocation();
   const result = location.state?.result as AssessmentResult | undefined;
   const { t } = useI18n();
+  const [trend, setTrend] = useState<TrendAnalysis | null>(null);
+
+  useEffect(() => {
+    if (result) {
+      saveResultToHistory(result);
+      const history = getHistory();
+      setTrend(calculateTrend(history));
+    }
+  }, [result]);
 
   if (!result) return <Navigate to="/assessment" replace />;
 
@@ -36,6 +46,48 @@ const ResultsPage = () => {
               <p className="text-muted-foreground leading-relaxed">{t.feedback[result.level]}</p>
               <p className="text-xs text-muted-foreground mt-3">{t.results.score}: {result.totalScore} / {result.maxScore}</p>
             </div>
+
+            {/* Stress Trend Section */}
+            {trend && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-card rounded-2xl p-6 shadow-soft border border-border mb-8 overflow-hidden relative"
+              >
+                <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+                
+                <div className="flex items-center gap-4 mb-3">
+                  <div className={`p-2.5 rounded-xl ${
+                    trend.status === 'improving' ? 'bg-emerald-500/10 text-emerald-600' : 
+                    trend.status === 'worsening' ? 'bg-rose-500/10 text-rose-600' : 'bg-blue-500/10 text-blue-600'
+                  }`}>
+                    {trend.status === 'improving' && <TrendingDown className="w-5 h-5" />}
+                    {trend.status === 'worsening' && <TrendingUp className="w-5 h-5" />}
+                    {trend.status === 'stable' && <Minus className="w-5 h-5" />}
+                    {trend.status === 'first' && <Clock className="w-5 h-5" />}
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-foreground">
+                      {trend.status === 'improving' && 'Stress is Decreasing'}
+                      {trend.status === 'worsening' && 'Stress is Increasing'}
+                      {trend.status === 'stable' && 'Stress levels are Stable'}
+                      {trend.status === 'first' && 'First Assessment'}
+                    </h3>
+                  </div>
+                </div>
+                
+                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                  {trend.message}
+                </p>
+
+                {trend.status !== 'first' && (
+                  <div className="text-xs font-medium px-3 py-1.5 bg-muted rounded-lg inline-block">
+                    {trend.difference > 0 ? '+' : ''}{trend.difference}% change from last time
+                  </div>
+                )}
+              </motion.div>
+            )}
 
 
             <div className="flex flex-col sm:flex-row gap-4">
