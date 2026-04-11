@@ -1,6 +1,9 @@
+import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Play, Clock, Wind, Brain, Leaf, Heart, Sparkles, Star } from "lucide-react";
+import { Play, Clock, Wind, Brain, Leaf, Heart, Sparkles, Star, Bell } from "lucide-react";
 import Layout from "@/components/Layout";
+import ExerciseReminderModal from "@/components/ExerciseReminderModal";
+import { useExerciseReminders } from "@/lib/useExerciseReminders";
 
 type Exercise = {
   id: string;
@@ -186,7 +189,15 @@ const cardVariants: import("framer-motion").Variants = {
   }),
 };
 
-function ExerciseCard({ exercise, index }: { exercise: Exercise; index: number }) {
+function ExerciseCard({
+  exercise,
+  index,
+  onRemind,
+}: {
+  exercise: Exercise;
+  index: number;
+  onRemind: (title: string, url: string) => void;
+}) {
   return (
     <motion.div
       custom={index}
@@ -209,24 +220,59 @@ function ExerciseCard({ exercise, index }: { exercise: Exercise; index: number }
           <Clock className="w-3.5 h-3.5" />
           {exercise.duration}
         </span>
-        <a
-          href={exercise.youtubeUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground text-sm font-semibold transition-all duration-200 group-hover:scale-105"
-        >
-          <Play className="w-3.5 h-3.5 fill-current" />
-          Watch
-        </a>
+        <div className="flex items-center gap-2">
+          {/* Reminder bell */}
+          <button
+            onClick={() => onRemind(exercise.title, exercise.youtubeUrl)}
+            className="p-2 rounded-xl bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary transition-all duration-200"
+            title="Set Reminder"
+          >
+            <Bell className="w-3.5 h-3.5" />
+          </button>
+          <a
+            href={exercise.youtubeUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 hover:bg-primary text-primary hover:text-primary-foreground text-sm font-semibold transition-all duration-200 group-hover:scale-105"
+          >
+            <Play className="w-3.5 h-3.5 fill-current" />
+            Watch
+          </a>
+        </div>
       </div>
     </motion.div>
   );
 }
 
 export default function ExercisesPage() {
+  const [reminderTarget, setReminderTarget] = useState<{ title: string; url: string } | null>(null);
+
+  // noop alarm handler here — actual alarm firing is managed from App.tsx
+  const { scheduleReminder } = useExerciseReminders(() => {});
+
+  const handleRemind = useCallback((title: string, url: string) => {
+    setReminderTarget({ title, url });
+  }, []);
+
+  const handleSchedule = useCallback(
+    (ms: number, daily: boolean, title: string, url: string) => {
+      scheduleReminder(ms, daily, title, url);
+    },
+    [scheduleReminder]
+  );
+
   return (
-    <Layout>
-      <div className="min-h-screen pt-20 pb-16">
+    <>
+      {reminderTarget && (
+        <ExerciseReminderModal
+          exerciseTitle={reminderTarget.title}
+          exerciseUrl={reminderTarget.url}
+          onClose={() => setReminderTarget(null)}
+          onSchedule={handleSchedule}
+        />
+      )}
+      <Layout>
+        <div className="min-h-screen pt-20 pb-16">
         {/* Hero Header */}
         <section className="container mx-auto px-4 py-12 text-center max-w-3xl">
           <motion.div
@@ -296,7 +342,7 @@ export default function ExercisesPage() {
             </motion.div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {section.exercises.map((ex, i) => (
-                <ExerciseCard key={ex.id} exercise={ex} index={i} />
+                <ExerciseCard key={ex.id} exercise={ex} index={i} onRemind={handleRemind} />
               ))}
             </div>
           </section>
@@ -326,5 +372,6 @@ export default function ExercisesPage() {
         </section>
       </div>
     </Layout>
+    </>
   );
 }
