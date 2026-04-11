@@ -8,6 +8,7 @@ const translations = {
     nav: {
       home: "Home",
       assessment: "Assessment",
+      exercises: "Exercises",
       solutions: "Solutions",
       dataInsights: "Data Insights",
       awareness: "Awareness",
@@ -182,6 +183,7 @@ const translations = {
     nav: {
       home: "होम",
       assessment: "मूल्यांकन",
+      exercises: "व्यायाम",
       solutions: "समाधान",
       dataInsights: "डेटा अंतर्दृष्टि",
       awareness: "जागरूकता",

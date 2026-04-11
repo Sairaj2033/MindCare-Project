@@ -18,6 +18,7 @@ import {
 const navKeys = [
   { to: "/", key: "home" as const },
   { to: "/assessment", key: "assessment" as const },
+  { to: "/exercises", key: "exercises" as const },
   { to: "/solutions", key: "solutions" as const },
   { to: "/data-insights", key: "dataInsights" as const },
   { to: "/awareness", key: "awareness" as const },

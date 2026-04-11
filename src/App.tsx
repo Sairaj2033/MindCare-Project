@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import RegisterPage from "./pages/RegisterPage";
 import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
+import ExercisesPage from "./pages/ExercisesPage";
 import AssessmentReminder from "./components/AssessmentReminder";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/register" element={<AuthPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/exercises" element={<ExercisesPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
