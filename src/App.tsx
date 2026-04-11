@@ -17,6 +17,7 @@ import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
 import ExercisesPage from "./pages/ExercisesPage";
 import AssessmentReminder from "./components/AssessmentReminder";
+import MindCareChat from "./components/MindCareChat";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +29,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <AssessmentReminder />
+          <MindCareChat />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/assessment" element={<AssessmentPage />} />
