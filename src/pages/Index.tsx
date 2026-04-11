@@ -27,13 +27,13 @@ const Index = () => {
         onMouseMove={handleMouseMove}
       >
         
-        {/* Invisible Math Layer: Generates broader, stronger 10s breathing wind noise */}
-        <svg className="hidden">
+        {/* Invisible Math Layer: Must use CSS absolute 0px rather than 'display:none' otherwise Chrome/Safari silently kill the filter engine entirely */}
+        <svg style={{ position: "absolute", width: 0, height: 0 }}>
           <filter id="wind-displacement">
-            <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="1" result="noise">
-              <animate attributeName="baseFrequency" values="0.008 0.012; 0.012 0.018; 0.008 0.012" dur="10s" repeatCount="indefinite" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.005 0.01" numOctaves="2" result="noise">
+              <animate attributeName="baseFrequency" values="0.005 0.01; 0.01 0.02; 0.005 0.01" dur="12s" repeatCount="indefinite" />
             </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="35" xChannelSelector="R" yChannelSelector="G" />
           </filter>
         </svg>
 
