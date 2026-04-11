@@ -1,3 +1,7 @@
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import nodemailer from "nodemailer";
 import path from "path";
 import { fileURLToPath } from "url";
 
