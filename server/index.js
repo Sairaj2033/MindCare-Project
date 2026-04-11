@@ -1,13 +1,18 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import nodemailer from "nodemailer";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 dotenv.config();
 
 const app = express();
 app.use(cors()); // In production, replace with specific origins for better security
 app.use(express.json());
+
+// ── Serve Static Assets ────────────────────────────────────────────────
+// Point to the built frontend files in the root /dist directory
+app.use(express.static(path.join(__dirname, "../dist")));
 
 // ── Nodemailer Transporter (Gmail) ────────────────────────────────────
 const transporter = nodemailer.createTransport({
@@ -193,8 +198,14 @@ app.get("/api/health", (_req, res) => {
   res.json({ status: "ok" });
 });
 
+// ── Catch-all for SPA ──────────────────────────────────────────────────
+// Any request that doesn't match an API route will serve index.html
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../dist/index.html"));
+});
+
 // ── Start server ───────────────────────────────────────────────────────
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
-  console.log(`🚀 Email server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
