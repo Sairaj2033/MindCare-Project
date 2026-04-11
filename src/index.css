@@ -135,3 +135,13 @@
     box-shadow: var(--shadow-elevated);
   }
 }
+
+/* ── Global scrollbar hide (scroll still works) ────────────────────────── */
+*::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;  /* IE / Edge */
+  scrollbar-width: none;     /* Firefox */
+}
