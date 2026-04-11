@@ -18,7 +18,7 @@ export default function ReminderAlarmPopup({ reminder, onStart, onSnooze, onDism
           initial={{ y: 80, opacity: 0, scale: 0.95 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
           exit={{ y: 80, opacity: 0, scale: 0.95 }}
-          transition={{ type: "spring", damping: 22, stiffness: 260 }}
+          transition={{ type: "spring", damping: 35, stiffness: 140 }}
           className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[70] w-[92vw] max-w-sm"
         >
           <div className="bg-card border border-primary/30 rounded-2xl shadow-elevated overflow-hidden">

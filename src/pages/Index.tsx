@@ -14,8 +14,8 @@ const Index = () => {
   // High-performance fluid 60fps tracking for the watery cursor ripple
   const cursorX = useMotionValue(0);
   const cursorY = useMotionValue(0);
-  const springX = useSpring(cursorX, { damping: 30, stiffness: 100 });
-  const springY = useSpring(cursorY, { damping: 30, stiffness: 100 });
+  const springX = useSpring(cursorX, { damping: 45, stiffness: 70 });
+  const springY = useSpring(cursorY, { damping: 45, stiffness: 70 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     // Ambient Parallax logic
@@ -42,7 +42,7 @@ const Index = () => {
         <svg style={{ position: "absolute", width: 0, height: 0 }}>
           <filter id="wind-displacement">
             <feTurbulence type="fractalNoise" baseFrequency="0.006 0.01" numOctaves="2" result="noise">
-              <animate attributeName="baseFrequency" values="0.006 0.01; 0.008 0.012; 0.006 0.01" dur="20s" repeatCount="indefinite" />
+              <animate attributeName="baseFrequency" values="0.006 0.01; 0.007 0.011; 0.006 0.01" dur="35s" repeatCount="indefinite" />
             </feTurbulence>
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="18" xChannelSelector="R" yChannelSelector="G" />
           </filter>
@@ -56,23 +56,23 @@ const Index = () => {
           <div className="absolute inset-0 pointer-events-none overflow-hidden mix-blend-screen">
             <motion.div 
               animate={{ x: mousePos.x * -10, y: mousePos.y * -10 }} 
-              transition={{ type: "spring", damping: 60, stiffness: 40 }}
+              transition={{ type: "spring", damping: 100, stiffness: 25 }}
               className="absolute top-[20%] left-[20%] w-72 h-72 bg-primary/20 rounded-full blur-[90px]" 
             />
             <motion.div 
               animate={{ x: mousePos.x * 8, y: mousePos.y * 8 }} 
-              transition={{ type: "spring", damping: 60, stiffness: 40 }}
+              transition={{ type: "spring", damping: 100, stiffness: 25 }}
               className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-blue-400/15 rounded-full blur-[100px]" 
             />
             {/* Floating Soft Light Particles */}
             <motion.div 
               animate={{ x: mousePos.x * -5, y: mousePos.y * -5 }} 
-              transition={{ type: "spring", damping: 80, stiffness: 30 }}
+              transition={{ type: "spring", damping: 120, stiffness: 20 }}
               className="absolute top-[35%] right-[25%] w-2 h-2 bg-white/40 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.8)]"
             />
             <motion.div 
               animate={{ x: mousePos.x * 6, y: mousePos.y * 6 }} 
-              transition={{ type: "spring", damping: 80, stiffness: 30 }}
+              transition={{ type: "spring", damping: 120, stiffness: 20 }}
               className="absolute bottom-[45%] left-[25%] w-1.5 h-1.5 bg-primary/40 rounded-full shadow-[0_0_10px_rgba(var(--primary),0.8)]"
             />
           </div>
@@ -142,7 +142,7 @@ const Index = () => {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
             className="max-w-2xl"
           >
             <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight mb-6">

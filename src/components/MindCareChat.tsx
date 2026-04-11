@@ -127,7 +127,7 @@ export default function MindCareChat() {
             initial={{ opacity: 0, y: 24, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.97 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
             className="fixed bottom-24 right-4 z-50 w-[92vw] max-w-sm rounded-2xl border border-border bg-card shadow-[0_12px_48px_rgba(0,0,0,0.25)] flex flex-col overflow-hidden"
             style={{ maxHeight: "78vh" }}
           >
@@ -206,8 +206,8 @@ export default function MindCareChat() {
                       <motion.div
                         key={i}
                         className="w-2 h-2 bg-primary/50 rounded-full"
-                        animate={{ y: [0, -5, 0] }}
-                        transition={{ duration: 0.8, delay: d, repeat: Infinity, ease: "easeInOut" }}
+                        animate={{ y: [0, -6, 0] }}
+                        transition={{ duration: 1.0, delay: d, repeat: Infinity, ease: "easeInOut" }}
                       />
                     ))}
                   </div>
