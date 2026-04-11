@@ -82,43 +82,44 @@ const Index = () => {
             style={{ x: springX, y: springY }}
             className="absolute pointer-events-none z-10"
           >
-            {/* Outermost wide halo */}
+            {/* Outermost halo — 500px */}
             <div
               style={{
                 position: "absolute",
-                width: 300,
-                height: 300,
-                top: -150,
-                left: -150,
+                width: 500,
+                height: 500,
+                top: -250,
+                left: -250,
                 borderRadius: "50%",
-                background: "radial-gradient(circle, rgba(186,230,253,0.30) 0%, rgba(147,197,253,0.15) 45%, transparent 70%)",
-                filter: "blur(20px)",
+                background: "radial-gradient(circle, rgba(186,230,253,0.50) 0%, rgba(147,197,253,0.25) 45%, transparent 70%)",
+                filter: "blur(30px)",
               }}
             />
-            {/* Mid glow ring */}
+            {/* Mid glow ring — 200px */}
             <div
               style={{
                 position: "absolute",
-                width: 140,
-                height: 140,
-                top: -70,
-                left: -70,
+                width: 200,
+                height: 200,
+                top: -100,
+                left: -100,
                 borderRadius: "50%",
-                background: "radial-gradient(circle, rgba(255,255,255,0.50) 0%, rgba(186,230,253,0.30) 55%, transparent 100%)",
-                filter: "blur(10px)",
+                background: "radial-gradient(circle, rgba(255,255,255,0.80) 0%, rgba(186,230,253,0.50) 55%, transparent 100%)",
+                filter: "blur(12px)",
               }}
             />
-            {/* Bright center core */}
+            {/* Bright center core — 60px */}
             <div
               style={{
                 position: "absolute",
-                width: 40,
-                height: 40,
-                top: -20,
-                left: -20,
+                width: 60,
+                height: 60,
+                top: -30,
+                left: -30,
                 borderRadius: "50%",
-                background: "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(186,230,253,0.60) 60%, transparent 100%)",
+                background: "radial-gradient(circle, rgba(255,255,255,1.0) 0%, rgba(186,230,253,0.80) 60%, transparent 100%)",
                 filter: "blur(3px)",
+                boxShadow: "0 0 20px 8px rgba(186,230,253,0.6)",
               }}
             />
           </motion.div>
