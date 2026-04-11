@@ -77,35 +77,48 @@ const Index = () => {
             />
           </div>
 
-          {/* Interactive Liquid Trailing Cursor Ripple — covers full hero, z-10 so visible */}
+          {/* Interactive Liquid Trailing Cursor Ripple — Maximum visibility */}
           <motion.div
             style={{ x: springX, y: springY }}
             className="absolute pointer-events-none z-10"
           >
-            {/* Outer soft glow ring */}
+            {/* Outermost wide halo */}
             <div
               style={{
                 position: "absolute",
-                width: 180,
-                height: 180,
-                top: -90,
-                left: -90,
+                width: 300,
+                height: 300,
+                top: -150,
+                left: -150,
                 borderRadius: "50%",
-                background: "radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(147,197,253,0.10) 50%, transparent 75%)",
-                filter: "blur(8px)",
+                background: "radial-gradient(circle, rgba(186,230,253,0.30) 0%, rgba(147,197,253,0.15) 45%, transparent 70%)",
+                filter: "blur(20px)",
               }}
             />
-            {/* Inner bright core */}
+            {/* Mid glow ring */}
             <div
               style={{
                 position: "absolute",
-                width: 60,
-                height: 60,
-                top: -30,
-                left: -30,
+                width: 140,
+                height: 140,
+                top: -70,
+                left: -70,
                 borderRadius: "50%",
-                background: "radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(186,230,253,0.15) 60%, transparent 100%)",
-                filter: "blur(4px)",
+                background: "radial-gradient(circle, rgba(255,255,255,0.50) 0%, rgba(186,230,253,0.30) 55%, transparent 100%)",
+                filter: "blur(10px)",
+              }}
+            />
+            {/* Bright center core */}
+            <div
+              style={{
+                position: "absolute",
+                width: 40,
+                height: 40,
+                top: -20,
+                left: -20,
+                borderRadius: "50%",
+                background: "radial-gradient(circle, rgba(255,255,255,0.95) 0%, rgba(186,230,253,0.60) 60%, transparent 100%)",
+                filter: "blur(3px)",
               }}
             />
           </motion.div>
