@@ -17,6 +17,7 @@ import RegisterPage from "./pages/RegisterPage";
 import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
 import ExercisesPage from "./pages/ExercisesPage";
+import EntertainmentPage from "./pages/EntertainmentPage";
 import AssessmentReminder from "./components/AssessmentReminder";
 import MindCareChat from "./components/MindCareChat";
 import ReminderAlarmPopup from "./components/ReminderAlarmPopup";
@@ -55,6 +56,7 @@ function AppInner() {
         <Route path="/auth" element={<AuthPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/exercises" element={<ExercisesPage />} />
+        <Route path="/entertainment" element={<EntertainmentPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>

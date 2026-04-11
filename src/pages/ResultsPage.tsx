@@ -42,6 +42,9 @@ const ResultsPage = () => {
               <Link to="/solutions" state={{ level: result.level }} className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl gradient-accent text-accent-foreground font-semibold shadow-card hover:opacity-90 transition-opacity">
                 {t.results.viewSolutions} <ArrowRight className="w-4 h-4" />
               </Link>
+              <Link to="/entertainment" state={{ level: result.level }} className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-primary/10 hover:bg-primary hover:text-primary-foreground text-primary font-semibold shadow-soft border border-border transition-all duration-200">
+                🎬 Entertainment Picks
+              </Link>
               <Link to="/assessment" className="flex-1 inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-card text-foreground font-semibold shadow-soft border border-border hover:bg-muted transition-colors">
                 {t.results.retake}
               </Link>
