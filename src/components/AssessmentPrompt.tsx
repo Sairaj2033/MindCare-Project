@@ -56,10 +56,10 @@ export default function AssessmentPrompt() {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: 50, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 50, scale: 0.95 }}
-          className="fixed bottom-6 right-6 z-50 p-5 rounded-2xl w-full max-w-sm sm:w-96 shadow-2xl border-[0.5px] border-border/50 bg-card/90 backdrop-blur-xl group"
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
+          className="fixed bottom-6 right-6 z-50 p-5 rounded-2xl w-[95vw] max-w-sm sm:w-96 max-h-[85vh] overflow-y-auto shadow-2xl border-[0.5px] border-border/50 bg-card/90 backdrop-blur-xl group"
         >
           <div className="absolute top-4 right-4 cursor-pointer text-muted-foreground hover:text-foreground transition-colors" onClick={handleDismiss}>
             <X className="w-4 h-4" />

@@ -36,12 +36,12 @@ export default function DoctorRecommendation() {
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: 100, transition: { duration: 0.2 } }}
-          className="fixed bottom-6 right-6 z-[60] p-6 rounded-2xl w-full max-w-[400px] shadow-[0_20px_50px_-12px_rgba(0,0,0,0.25)] border border-border/60 bg-card/95 backdrop-blur-xl group"
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 100, transition: { duration: 0.2 } }}
+          className="fixed bottom-0 left-0 right-0 md:bottom-6 md:left-auto md:right-6 z-[60] p-5 md:p-6 rounded-t-2xl md:rounded-2xl w-full md:max-w-[400px] shadow-[0_-10px_40px_-10px_rgba(0,0,0,0.2)] border-t md:border border-border/60 bg-card/95 backdrop-blur-xl group"
         >
-          <div className="absolute top-4 right-4 cursor-pointer text-muted-foreground hover:text-foreground transition-colors" onClick={handleDismiss}>
+          <div className="absolute top-4 right-4 cursor-pointer text-muted-foreground hover:text-foreground transition-colors p-1" onClick={handleDismiss}>
             <X className="w-5 h-5" />
           </div>
           
@@ -73,16 +73,16 @@ export default function DoctorRecommendation() {
             </div>
           </div>
           
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <a
               href={`tel:${doctor.phone.replace(/[^0-9+]/g, '')}`}
-              className="flex-1 bg-foreground text-background text-sm font-bold py-2.5 px-4 rounded-xl text-center hover:opacity-90 transition-opacity drop-shadow-md"
+              className="flex-1 bg-foreground text-background text-sm font-bold py-3.5 sm:py-2.5 px-4 rounded-xl text-center hover:opacity-90 transition-opacity drop-shadow-md min-h-[44px] flex items-center justify-center"
             >
               Call Now
             </a>
             <button
               onClick={handleDismiss}
-              className="flex-1 bg-muted text-foreground text-sm font-semibold py-2.5 px-4 rounded-xl text-center hover:bg-muted/80 transition-colors"
+              className="flex-1 bg-muted text-foreground text-sm font-semibold py-3.5 sm:py-2.5 px-4 rounded-xl text-center hover:bg-muted/80 transition-colors min-h-[44px]"
             >
               Close
             </button>

@@ -125,7 +125,7 @@ export default function ProfilePage() {
           <CardFooter className="bg-muted/10 border-t border-border/30 px-6 sm:px-12 py-6 flex flex-col sm:flex-row justify-between items-center gap-4">
             <Button
               variant="outline"
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto min-h-[44px]"
               onClick={handleEditProfile}
             >
               <Settings className="w-4 h-4 mr-2" />
@@ -133,7 +133,7 @@ export default function ProfilePage() {
             </Button>
             <Button
               variant="destructive"
-              className="w-full sm:w-auto"
+              className="w-full sm:w-auto min-h-[44px]"
               onClick={handleLogout}
             >
               <LogOut className="w-4 h-4 mr-2" />
