@@ -21,12 +21,21 @@ import EntertainmentPage from "./pages/EntertainmentPage";
 import AssessmentReminder from "./components/AssessmentReminder";
 import MindCareChat from "./components/MindCareChat";
 import ReminderAlarmPopup from "./components/ReminderAlarmPopup";
+import CalmMeOverlay from "./components/CalmMeOverlay";
 import { useExerciseReminders, Reminder } from "./lib/useExerciseReminders";
-
+import { useEffect } from "react";
 const queryClient = new QueryClient();
 
 function AppInner() {
   const [activeAlarm, setActiveAlarm] = useState<Reminder | null>(null);
+  const [showCalmMode, setShowCalmMode] = useState(false);
+
+  // Listen for global calm mode triggers
+  useEffect(() => {
+    const handleTrigger = () => setShowCalmMode(true);
+    window.addEventListener("mindcare-calm-mode", handleTrigger);
+    return () => window.removeEventListener("mindcare-calm-mode", handleTrigger);
+  }, []);
 
   const handleAlarm = useCallback((r: Reminder) => {
     setActiveAlarm(r);
@@ -38,6 +47,7 @@ function AppInner() {
     <>
       <AssessmentReminder />
       <MindCareChat />
+      <CalmMeOverlay isOpen={showCalmMode} onClose={() => setShowCalmMode(false)} />
       <ReminderAlarmPopup
         reminder={activeAlarm}
         onStart={() => setActiveAlarm(null)}
