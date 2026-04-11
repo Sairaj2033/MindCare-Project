@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import RegisterPage from "./pages/RegisterPage";
 import AuthPage from "./pages/AuthPage";
 import ProfilePage from "./pages/ProfilePage";
+import AssessmentReminder from "./components/AssessmentReminder";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <AssessmentReminder />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/assessment" element={<AssessmentPage />} />

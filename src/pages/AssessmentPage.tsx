@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import Layout from "@/components/Layout";
 import { questions, answerOptions, calculateResult } from "@/lib/assessment";
@@ -145,8 +145,17 @@ const AssessmentPage = () => {
                 <ArrowLeft className="w-4 h-4" /> {t.assessment.previous}
               </button>
               {isLast && Object.keys(answers).length === questions.length ? (
-                <button onClick={handleSubmit} disabled={isSubmitting} className="flex items-center gap-2 px-6 py-3 rounded-xl gradient-accent text-accent-foreground font-semibold shadow-card hover:opacity-90 transition-opacity disabled:opacity-50">
-                  {isSubmitting ? "Processing..." : t.assessment.viewResults} <ArrowRight className="w-4 h-4" />
+                <button onClick={handleSubmit} disabled={isSubmitting} className="flex items-center justify-center gap-2 px-6 py-3 min-w-[160px] rounded-xl gradient-accent text-accent-foreground font-semibold shadow-card hover:opacity-90 transition-opacity disabled:opacity-50">
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-accent-foreground" />
+                      Processing...
+                    </>
+                  ) : (
+                    <>
+                      {t.assessment.viewResults} <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
                 </button>
               ) : (
                 <button onClick={() => setCurrentQ(Math.min(questions.length - 1, currentQ + 1))} disabled={answers[q.id] === undefined} className="flex items-center gap-2 px-4 py-2 rounded-xl text-muted-foreground hover:text-foreground disabled:opacity-30 transition-colors">

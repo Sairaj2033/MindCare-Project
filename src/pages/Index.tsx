@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, BarChart3, BookOpen, Brain } from "lucide-react";
@@ -8,14 +9,76 @@ import { useI18n } from "@/lib/i18n";
 
 const Index = () => {
   const { t } = useI18n();
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    // Normalize coordinates so the center is 0,0
+    const x = (e.clientX / window.innerWidth - 0.5) * 2;
+    const y = (e.clientY / window.innerHeight - 0.5) * 2;
+    setMousePos({ x, y });
+  };
+
   return (
     <Layout>
       <RegisterModal />
       {/* Hero */}
-      <section className="relative min-h-[90vh] flex items-center overflow-hidden">
+      <section 
+        className="relative min-h-[90vh] flex items-center overflow-hidden"
+        onMouseMove={handleMouseMove}
+      >
+        
+        {/* Invisible Math Layer: Generates broader, stronger 10s breathing wind noise */}
+        <svg className="hidden">
+          <filter id="wind-displacement">
+            <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="1" result="noise">
+              <animate attributeName="baseFrequency" values="0.008 0.012; 0.012 0.018; 0.008 0.012" dur="10s" repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="14" xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </svg>
+
         <div className="absolute inset-0">
+          {/* Standard background anchor */}
           <img src={heroBg} alt="Calming meditation illustration" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 gradient-hero opacity-60" />
+          
+          {/* Interactive Mouse Parallax Floating Glows & ambient particles */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden mix-blend-screen">
+            <motion.div 
+              animate={{ x: mousePos.x * -40, y: mousePos.y * -40 }} 
+              transition={{ type: "spring", damping: 40, stiffness: 60 }}
+              className="absolute top-[20%] left-[20%] w-72 h-72 bg-primary/20 rounded-full blur-[90px]" 
+            />
+            <motion.div 
+              animate={{ x: mousePos.x * 30, y: mousePos.y * 30 }} 
+              transition={{ type: "spring", damping: 40, stiffness: 60 }}
+              className="absolute bottom-[20%] right-[10%] w-96 h-96 bg-blue-400/15 rounded-full blur-[100px]" 
+            />
+            {/* Floating Soft Light Particles */}
+            <motion.div 
+              animate={{ x: mousePos.x * -20, y: mousePos.y * -20 }} 
+              transition={{ type: "spring", damping: 50, stiffness: 40 }}
+              className="absolute top-[35%] right-[25%] w-2 h-2 bg-white/40 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.8)]"
+            />
+            <motion.div 
+              animate={{ x: mousePos.x * 25, y: mousePos.y * 25 }} 
+              transition={{ type: "spring", damping: 50, stiffness: 40 }}
+              className="absolute bottom-[45%] left-[25%] w-1.5 h-1.5 bg-primary/40 rounded-full shadow-[0_0_10px_rgba(var(--primary),0.8)]"
+            />
+          </div>
+
+          {/* Animated Hair Overlay: Expanded CSS masking geometry and stronger displacement wave applied */}
+          <img 
+            src={heroBg} 
+            alt="" 
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none" 
+            style={{ 
+              filter: "url(#wind-displacement)",
+              WebkitMaskImage: "radial-gradient(ellipse 45% 55% at 50% 40%, black 15%, transparent 65%)",
+              maskImage: "radial-gradient(ellipse 45% 55% at 50% 40%, black 15%, transparent 65%)" 
+            }} 
+          />
+
+          <div className="absolute inset-0 gradient-hero opacity-50 pointer-events-none" />
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <motion.div

@@ -13,6 +13,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
       expand={true}
       visibleToasts={4}
       gap={14}
+      closeButton={true}
+      duration={6000}
       toastOptions={{
         classNames: {
           toast:

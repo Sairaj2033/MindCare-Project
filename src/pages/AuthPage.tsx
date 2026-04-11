@@ -22,6 +22,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import { Heart, Sparkles, AlertCircle, KeyRound } from "lucide-react";
+import Layout from "@/components/Layout";
 
 // ── Types ──────────────────────────────────────────────────────────────
 type RegisterFormValues = {
@@ -284,7 +285,8 @@ export default function AuthPage() {
   const handleSuccess = () => navigate("/");
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-md">
+    <Layout>
+      <div className="container mx-auto px-4 py-12 max-w-md">
       <AnimatePresence mode="wait">
         <motion.div
           key={mode}
@@ -334,5 +336,6 @@ export default function AuthPage() {
         </motion.div>
       </AnimatePresence>
     </div>
+    </Layout>
   );
 }

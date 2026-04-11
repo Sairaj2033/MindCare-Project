@@ -1,5 +1,6 @@
 import { useAuth } from "@/lib/useAuth";
 import { Link, useNavigate } from "react-router-dom";
+import Layout from "@/components/Layout";
 import {
   Card,
   CardHeader,
@@ -49,7 +50,8 @@ export default function ProfilePage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12 max-w-2xl min-h-[80vh]">
+    <Layout>
+      <div className="container mx-auto px-4 py-12 max-w-2xl min-h-[80vh]">
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -143,5 +145,6 @@ export default function ProfilePage() {
         </Card>
       </motion.div>
     </div>
+    </Layout>
   );
 }
